@@ -1,0 +1,48 @@
+# Importing necessary libraries
+import pandas as pd
+
+# Load the Titanic dataset
+titanic_data = pd.read_csv('titanic.csv')
+
+# Display the first few rows of the dataset to understand its structure
+print(titanic_data.head())
+# Check for missing values
+print(titanic_data.isnull().sum())
+
+# Handle missing values
+# For example, we can fill missing values in the 'Age' column with the median age
+titanic_data['Age'].fillna(titanic_data['Age'].median(), inplace=True)
+
+# For the 'Embarked' column, we can fill missing values with the most common value
+most_common_embarked = titanic_data['Embarked'].mode()[0]
+titanic_data['Embarked'].fillna(most_common_embarked, inplace=True)
+
+# Drop the 'Cabin' column as it has too many missing values
+titanic_data.drop(columns=['Cabin'], inplace=True)
+# Summary statistics
+print(titanic_data.describe())
+
+# Visualize survival rates based on different variables
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Survival based on gender
+sns.countplot(x='Sex', hue='Survived', data=titanic_data)
+plt.show()
+
+# Survival based on passenger class
+sns.countplot(x='Pclass', hue='Survived', data=titanic_data)
+plt.show()
+
+# Survival based on age
+sns.histplot(x='Age', hue='Survived', data=titanic_data, kde=True)
+plt.show()
+
+# Survival based on embarked port
+sns.countplot(x='Embarked', hue='Survived', data=titanic_data)
+plt.show()
+
+# Correlation matrix
+corr_matrix = titanic_data.corr()
+sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
+plt.show()
